@@ -1,0 +1,408 @@
+<apex:page controller="ResourceController_Search" title="Resource Directory" sidebar="false" showHeader="false">
+  
+  <apex:stylesheet value="{!$Resource.FormStyles}"/>
+
+  <style>
+    div.rsc { border-style:solid; border-color:LightGray; border-width:thin; margin-left:1em; float:left; }
+    div.gm-style-iw { overflow:hidden!important; }
+    label.cbtab { display:inline-block; width:8em; }
+  </style>
+  
+  <apex:form style="width:900px; margin:auto; margin-top:2em;" >
+  
+    <apex:includeScript value="{!$Resource.FormSupport}"/>
+    <apex:includeScript value="https://maps.googleapis.com/maps/api/js?sensor=false"/>
+    
+    <apex:actionFunction name="runSearch" action="{!runSearch}" reRender="results">
+      <apex:param name="query" value=""/>
+    </apex:actionFunction>
+
+    <script>
+      var map;
+      var markers = [];
+      var infoWindow;
+      var geoLoc;
+      var validLoc = false;
+      
+      var searchLimit = 25;
+      var firstSearch = true;
+      
+      window.onload = function()
+      {
+          map = new google.maps.Map(document.getElementById("map"), {
+                      center: new google.maps.LatLng(39.8, -98.6),
+                      zoom: 4,
+                      mapTypeId: google.maps.MapTypeId.ROADMAP });
+                      
+          infoWindow = new google.maps.InfoWindow();
+      };
+      
+      function clearMap()
+      {
+          infoWindow.close();
+          
+          for(var i = 0; i < markers.length; i++)
+          {
+              markers[i].setMap(null);
+          }
+          
+          while(markers.length > 0) { markers.pop(); }
+      };      
+      
+      function addMarker(name, id, lat, lng, desc)
+      {
+          var html = "<a href=\"{!$Page.Resource_Info}?id=" + id 
+                      + "\" onclick=\"window.open(this.href, '', 'width=480,height=480'); return false;\">" 
+                      + name + "</a><br/>" + "<p style=\"width:20em;\">" + desc + "</p>";
+          
+          var marker = new google.maps.Marker({ map: map, position: new google.maps.LatLng(lat,lng) });
+          
+          google.maps.event.addListener(marker, "click", 
+              function()
+              {
+                  infoWindow.setContent(html);
+                  infoWindow.open(map, marker);
+              });
+          
+          markers.push(marker);
+      };
+      
+      function centerMap()
+      {
+          if(markers.length == 1)
+          {
+              map.setCenter(markers[0].getPosition());
+              map.setZoom(15);
+          }
+          else if(markers.length > 1)
+          {
+              var bounds = new google.maps.LatLngBounds();
+          
+              for(var i = 0; i < markers.length; i++)
+              {
+                  bounds.extend(markers[i].getPosition());
+              }
+          
+              map.fitBounds(bounds);
+          }
+      };
+      
+      function updateLocation()
+      {
+          validLoc = false;
+          
+          if(valid(document.getElementById("location").value))
+          {
+              var geocoder = new google.maps.Geocoder();
+
+              geocoder.geocode({address: document.getElementById("location").value}, 
+                  function(results, status)
+                  {
+                      if(status == google.maps.GeocoderStatus.OK)
+                      {
+                          geoLoc = results[0].geometry.location;
+                          validLoc = true;
+                          search();
+                      }
+                  });
+          }
+          else
+          {
+              search();
+          }
+      };
+      
+      function resultsHelp(numResults)
+      {
+          if(numResults == searchLimit)
+          {
+              document.getElementById("resultsHelp").innerHTML = "Results limit reached.  Try refining your search.";
+          }
+          else if(numResults == 0 && !firstSearch)
+          {
+              document.getElementById("resultsHelp").innerHTML = "No results found.  Try refining your search.";
+          }
+          else
+          {
+              document.getElementById("resultsHelp").innerHTML = "";
+          }
+
+          firstSearch = false;      
+      };
+
+      function search()
+      {
+          var query = "select Id, Name, Short_Description__c, Location__latitude__s, Location__longitude__s";
+          query += " from Resource__c where Public__c = true";
+          
+          if(document.getElementById("category").selectedIndex != 0)
+          {
+              query += " and Primary_Category__c = '"
+                  + document.getElementById("category").options[document.getElementById("category").selectedIndex].value
+                  + "'";
+          }
+
+          if(document.getElementById("accessible").checked) { query += " and Accessible_to_Disabled__c = true"; }
+          if(document.getElementById("safeHaven").checked) { query += " and Safe_Haven__c = true"; }
+          if(document.getElementById("viaPhone").checked) { query += " and Counseling_by_Phone__c = true"; }
+          if(document.getElementById("onlineSvc").checked) { query += " and Online_Services__c = true"; }
+          if(document.getElementById("liveChat").checked) { query += " and Live_Chat__c = true"; }
+          if(document.getElementById("affordable").checked) { query += " and Affordable_Free_Service__c = true"; }
+          
+          if(valid(document.getElementById("language").value))
+          {
+              query += " and Available_Languages__c like '%" + document.getElementById("language").value + "%'";
+          }
+          
+          var tags = "";
+          if(document.getElementById("suicide").checked) { tags += ";Suicide"; }
+          if(document.getElementById("depression").checked) { tags += ";Depression"; }
+          if(document.getElementById("bipolar").checked) { tags += ";Bipolar"; }
+          if(document.getElementById("anxiety").checked) { tags += ";Anxiety"; }
+          if(document.getElementById("substanceUse").checked) { tags += ";Substance Use"; }
+          if(document.getElementById("eatingDisorder").checked) { tags += ";Eating Disorder"; }
+          if(document.getElementById("selfHarm").checked) { tags += ";Self Harm"; }
+          if(document.getElementById("bullying").checked) { tags += ";Bullying"; }
+          if(document.getElementById("ptsd").checked) { tags += ";Post-Traumatic Stress Disorder"; }
+          if(document.getElementById("survivor").checked) { tags += ";Survivor Services"; }
+          if(document.getElementById("selfHelp").checked) { tags += ";Self Help"; }
+          if(document.getElementById("provider").checked) { tags += ";Licensed Provider"; }
+          if(document.getElementById("hospital").checked) { tags += ";Hospital"; }
+          if(document.getElementById("fitness").checked) { tags += ";Fitness"; }
+          if(document.getElementById("nutrition").checked) { tags += ";Nutrition"; }
+          if(document.getElementById("nonprofit").checked) { tags += ";Non-profit"; }
+          if(document.getElementById("child").checked) { tags += ";Child"; }
+          if(document.getElementById("adolescent").checked) { tags += ";Adolescent"; }
+          if(document.getElementById("adult").checked) { tags += ";Adult"; }
+          if(document.getElementById("senior").checked) { tags += ";Senior"; }
+          if(document.getElementById("activityGroup").checked) { tags += ";Activity Group"; }
+          if(document.getElementById("peerSupport").checked) { tags += ";Peer Support"; }
+          if(document.getElementById("military").checked) { tags += ";Military"; }
+          if(document.getElementById("lgbtqia").checked) { tags += ";LGBTQIA"; }
+          if(document.getElementById("victim").checked) { tags += ";Victim"; }
+          if(document.getElementById("raceEthnic").checked) { tags += ";Race/Ethnic Specific"; }
+          if(tags.length > 0)
+          {
+              query += " and Tags__c includes ('" + tags.substring(1) + "')";
+          }
+          
+          if(validLoc)
+          {
+              query += " and DISTANCE(Location__c, GEOLOCATION(" + geoLoc.lat() + "," + geoLoc.lng() + "), 'mi') < "
+                          + document.getElementById("radius").options[document.getElementById("radius").selectedIndex].value;
+                          
+              query += " order by DISTANCE(Location__c, GEOLOCATION(" + geoLoc.lat() + "," + geoLoc.lng() + "), 'mi')";
+          }
+          else
+          {
+              query += " order by Name asc";
+          }
+          
+          query += " limit " + searchLimit;
+          
+          clearMap();
+          
+          runSearch(query);
+      };
+    </script>
+
+    <apex:pageBlock mode="edit">
+      <!-- HEADER layout -->
+      <br/>
+      <h2 style="margin-left:0.67em; font-size:1.5em;">RESOURCE DIRECTORY</h2>
+      <p style="margin-left:1em; width:70em;">
+          Welcome to our database of free mental wellness services. 
+          This ever-growing database is free to use and accessible 24/7/365.
+          <br/>
+          Do you know of a great service in your area?  Please 
+          <a href="{!$Page.Resource_Submission}">add it here</a>.
+      </p>
+      <div style="border-style:none none dotted none; border-width:thin; margin:1em;"/>
+      
+      <section>
+        <div class="rsc" style="width:72.5em; height:28em;">
+          <br/>
+          <h2 style="margin:0.83em; font-size:1.2em;">Search Parameters</h2>
+          <br/>
+
+          <div style="border-style:none none solid none; border-color:LightGray; margin:1em 0em 1em 0em; border-width:thin;"/>
+          
+          <div style="display:inline-block; width:30em; height:15em; float:left;">
+              <label for="category" style="display:inline; font-weight:bold;">Primary Category</label>
+                  <select id="category" style="display:inline; width:12em;" onchange="search();">
+                      <option value=""></option>
+                      <option value="Counseling">Counseling</option>
+                      <option value="Crisis Line">Crisis Line</option>
+                      <option value="Financial Services">Financial Services</option>
+                      <option value="Inpatient">Inpatient</option>
+                      <option value="Support Group">Support Group</option>
+                      <option value="Advocacy">Advocacy</option>
+                      <option value="Service Animals">Service Animals</option>
+                      <option value="Community Center">Community Center</option>
+                      <option value="Informational">Informational</option>
+                      <option value="General Wellness">General Wellness</option>
+                      <option value="Rehabilitation">Rehabilitation</option>
+                      <option value="Housing Services">Housing Services</option>
+                  </select><br/>
+              <br/>
+              <label style="font-weight:bold;">Services Available</label>
+              <br style="line-height:25%;"/>
+              <input type="checkbox" id="affordable" style="display:inline;" onchange="search();"/>
+              <label for="affordable" class="cb">Free or low-cost to those who qualify</label><br/>
+              <input type="checkbox" id="accessible" style="display:inline;" onchange="search();"/>
+              <label for="accessible" class="cb">Accessible to those with disabilites</label><br/>
+              <input type="checkbox" id="viaPhone" style="display:inline;" onchange="search();"/>
+              <label for="viaPhone" class="cb">Counseling services accessible via phone</label><br/>
+              <input type="checkbox" id="onlineSvc" style="display:inline;" onchange="search();"/>
+              <label for="onlineSvc" class="cb">Services available online</label><br/>
+              <input type="checkbox" id="liveChat" style="display:inline;" onchange="search();"/>
+              <label for="liveChat" class="cb">Live chat available</label><br/>
+              <input type="checkbox" id="safeHaven" style="display:inline;" onchange="search();"/>
+              <label for="safeHaven" class="cb">Safe haven</label><br/>
+              <br style="line-height:25%;"/>
+              <label for="language" style="display:inline;">Language</label>
+              <input type="text" id="language" style="display:inline; width:12em;" onchange="search();"/><br/>
+              <br/>
+          </div>
+
+          <div style="display:inline-block; width:40em; height:15em; float:left;">
+              <label style="font-weight:bold;">Search by Keyword</label>
+              <br style="line-height:25%;"/>
+              <input type="checkbox" id="suicide" style="display:inline;" onchange="search();"/>
+              <label for="suicide" class="cb cbtab">Suicide</label>
+              <input type="checkbox" id="depression" style="display:inline;" onchange="search();"/>
+              <label for="depression" class="cb cbtab">Depression</label>
+              <input type="checkbox" id="bipolar" style="display:inline;" onchange="search();"/>
+              <label for="bipolar" class="cb cbtab">Bipolar</label>
+              <br/>
+              <input type="checkbox" id="anxiety" style="display:inline;" onchange="search();"/>
+              <label for="anxiety" class="cb cbtab">Anxiety</label>
+              <input type="checkbox" id="substanceUse" style="display:inline;" onchange="search();"/>
+              <label for="substanceUse" class="cb cbtab">Substance Use</label>
+              <input type="checkbox" id="eatingDisorder" style="display:inline;" onchange="search();"/>
+              <label for="eatingDisorder" class="cb cbtab">Eating Disorder</label>
+              <br/>
+              <input type="checkbox" id="selfHarm" style="display:inline;" onchange="search();"/>
+              <label for="selfHarm" class="cb cbtab">Self Harm</label>
+              <input type="checkbox" id="bullying" style="display:inline;" onchange="search();"/>
+              <label for="bullying" class="cb cbtab">Bullying</label>
+              <input type="checkbox" id="ptsd" style="display:inline;" onchange="search();"/>
+              <label for="ptsd" class="cb cbtab">PTSD</label>
+              <br/>
+              <input type="checkbox" id="survivor" style="display:inline;" onchange="search();"/>
+              <label for="survivor" class="cb cbtab">Survivor Services</label>
+              <input type="checkbox" id="selfHelp" style="display:inline;" onchange="search();"/>
+              <label for="selfHelp" class="cb cbtab">Self Help</label>
+              <input type="checkbox" id="provider" style="display:inline;" onchange="search();"/>
+              <label for="provider" class="cb cbtab">Licensed Provider</label>
+              <br/>
+              <input type="checkbox" id="hospital" style="display:inline;" onchange="search();"/>
+              <label for="hospital" class="cb cbtab">Hospital</label>
+              <input type="checkbox" id="fitness" style="display:inline;" onchange="search();"/>
+              <label for="fitness" class="cb cbtab">Fitness</label>
+              <input type="checkbox" id="nutrition" style="display:inline;" onchange="search();"/>
+              <label for="nutrition" class="cb cbtab">Nutrition</label>
+              <br/>
+              <input type="checkbox" id="nonprofit" style="display:inline;" onchange="search();"/>
+              <label for="nonprofit" class="cb cbtab">Non-profit</label>
+              <input type="checkbox" id="child" style="display:inline;" onchange="search();"/>
+              <label for="child" class="cb cbtab">Child</label>
+              <input type="checkbox" id="adolescent" style="display:inline;" onchange="search();"/>
+              <label for="adolescent" class="cb cbtab">Adolescent</label>
+              <br/>
+              <input type="checkbox" id="adult" style="display:inline;" onchange="search();"/>
+              <label for="adult" class="cb cbtab">Adult</label>
+              <input type="checkbox" id="senior" style="display:inline;" onchange="search();"/>
+              <label for="senior" class="cb cbtab">Senior</label>
+              <input type="checkbox" id="activityGroup" style="display:inline;" onchange="search();"/>
+              <label for="activityGroup" class="cb cbtab">Activity Group</label>
+              <br/>
+              <input type="checkbox" id="peerSupport" style="display:inline;" onchange="search();"/>
+              <label for="peerSupport" class="cb cbtab">Peer Support</label>
+              <input type="checkbox" id="military" style="display:inline;" onchange="search();"/>
+              <label for="military" class="cb cbtab">Military</label>
+              <input type="checkbox" id="lgbtqia" style="display:inline;" onchange="search();"/>
+              <label for="lgbtqia" class="cb cbtab">LGBTQIA</label>
+              <br/>
+              <input type="checkbox" id="victim" style="display:inline;" onchange="search();"/>
+              <label for="victim" class="cb cbtab">Victim</label>
+              <input type="checkbox" id="raceEthnic" style="display:inline;" onchange="search();"/>
+              <label for="raceEthnic" class="cb">Race/Ethnic Specific</label>
+              <br/>
+          </div>
+          
+          <br style="clear:both;"/>
+          <div style="border-style:none none solid none; border-color:LightGray; margin:1em 0em 1em 0em; border-width:thin;"/>
+
+          <div>
+              <label style="font-weight:bold;">Search by Location</label>
+              <br style="line-height:25%;"/>
+              <label for="location" style="display:inline;">Location</label>
+              <input type="text" id="location" style="display:inline; width:12em;" onchange="updateLocation();"/><br/>
+              <label style="display:inline;">Show results within </label>
+                  <select id="radius" style="display:inline; margin-left:0em;" onchange="if(validLoc) { search(); }">
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                  </select>
+              <label class="cb">miles</label><br/>
+              <br/>
+          </div>
+          
+        </div>
+        <br style="clear:both;"/>
+      </section>
+      
+      <br style="line-height:50%;"/>
+      <label id="resultsHelp" style="font-weight:bold; margin-left:1.5em;"/>
+      <br style="line-height:50%;"/>
+      
+      <section>
+        <div class="rsc" style="width:30em; height:53em;">
+            <apex:outputPanel id="results">
+                <apex:pageBlockTable value="{!resources}" var="resource" style="margin:0em; width:30em;">
+                  <apex:column >
+                    <apex:facet name="header"><apex:outputLabel style="text-align:left; font-size:1.3em; margin-left:0.5em;" value="Search Results"/></apex:facet>
+                    <apex:outputLink value="{!$Page.Resource_Info}?id={!resource.Id}" 
+                                     onclick="window.open(this.href, '', 'width=480,height=480'); return false;"
+                                     title="{!resource.Short_Description__c}">
+                            {!resource.Name}
+                    </apex:outputLink>
+                  </apex:column>
+                </apex:pageBlockTable>
+                <apex:repeat value="{!resources}" var="resource">
+                  <script>
+                    if(validLoc)
+                    {
+                        addMarker("{!resource.Name}", "{!resource.Id}", "{!resource.Location__Latitude__s}",
+                                        "{!resource.Location__Longitude__s}", "{!resource.Short_Description__c}");
+                    }
+                  </script>
+                </apex:repeat>
+                <script>
+                    if(validLoc)
+                    {
+                        centerMap();
+                    }
+            
+                    resultsHelp({!size});
+
+                </script>
+            </apex:outputPanel>
+        </div>
+        
+        <div class="rsc" style="width:41em; height:53em;">
+
+            <div id="map" style="width:100%; height:100%;"/>
+        </div>
+
+      <br style="clear:both;"/>
+      </section>
+      
+      <br/>
+
+    </apex:pageBlock>
+
+  </apex:form>
+</apex:page>

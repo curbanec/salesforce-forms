@@ -1,0 +1,913 @@
+<apex:page controller="MultiPageFormController" showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+<apex:stylesheet value="{!URLFOR($Resource.ResourceForms, 'staticResources/w3.css')}"/>
+    <apex:stylesheet value="{!$Resource.FormStyles}"/>
+    
+    <apex:includeScript value="{!$Resource.FormSupport}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ResourceForms, 'staticResources/autosize.min.js')}"/>
+
+
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Salesforce Lightning Design System Trailhead Module</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Import the Design System style sheet -->
+  <apex:slds />
+  
+  <script>
+      
+      <!-- The Salesforce Case object -->
+      function Case()
+      {
+          this.Id = null;
+      };
+    
+      var c;
+
+      <!-- Creates and updates the Case object -->
+      function updateCase()
+      {
+              <!-- create the Case object -->
+              c = new Case();
+          
+              c.Subject = "Resource Submission";
+              c.Type = "Resource Submission";
+          
+              <!-- #PAGE1 update Case object data -->
+              c.Resource_Name__c = document.getElementById("rscName").value;
+              
+              Primary_Category__c = document.getElementById("catSpecify")
+                              .options[document.getElementById("catSpecify").selectedIndex].value;
+              c.Website__c = document.getElementById("website").value;
+              c.Service_Phone_Number__c = document.getElementById("svcPhone").value;
+              c.Crisis_Line_Phone_Number__c = document.getElementById("crisisPhone").value;
+              c.Service_Street__c = document.getElementById("svcStreet").value;
+              c.Service_City__c = document.getElementById("svcCity").value;
+              c.Service_State__c = document.getElementById("svcState").value;
+              c.Service_Postal_Code__c = document.getElementById("svcPostalCode").value;
+              c.Service_Country__c = document.getElementById("svcCountry")
+                              .options[document.getElementById("svcCountry").selectedIndex].value;
+                              
+              c.Accessible_to_Disabled__c = document.getElementById("accessYes").checked;
+              c.Safe_Haven__c = document.getElementById("havenYes").checked;
+              c.Counseling_by_Phone__c = document.getElementById("cphoneYes").checked;
+              c.Online_Services__c = document.getElementById("onlineYes").checked;
+              c.Live_Chat__c = document.getElementById("chatYes").checked;
+          
+              <!-- #PAGE2 update Case object data -->
+              c.Affordable_Free_Service__c = document.getElementById("freeYes").checked;
+              c.Short_Description__c = document.getElementById("shortDesc").value;
+              c.Long_Description__c = document.getElementById("longDesc").value;
+              c.Service_Days_Hours__c = document.getElementById("svcHours").value;
+              
+              var lang = "";
+              if(document.getElementById("langEnglish").checked) { lang += "; English"; }
+              if(document.getElementById("langSpanish").checked) { lang += "; Spanish"; }
+              
+              /*if(document.getElementById("langOther").checked) 
+              {
+                  var res = document.getElementById("langSpecify").value.replace(";", ",").split(",");
+                  for(var i = 0; i < res.length; i++) { lang += "; " + res[i].trim(); }
+              }*/
+              
+              if(lang.length > 0) { lang = lang.substring(2); }
+              c.Available_Languages__c = lang;
+              
+              var tags = "";
+              if(document.getElementById("kSuicide").checked) { tags += ";Suicide"; }
+             if(document.getElementById("kDepression").checked) { tags += ";Depression"; }
+             if(document.getElementById("kBipolar").checked) { tags += ";Bipolar"; }
+             if(document.getElementById("kAnxiety").checked) { tags += ";Anxiety"; }
+             if(document.getElementById("kSubstance").checked) { tags += ";Substance Use"; }
+             if(document.getElementById("kEating").checked) { tags += ";Eating Disorder"; }
+             if(document.getElementById("kSelfHarm").checked) { tags += ";Self Harm"; }
+             if(document.getElementById("kBullying").checked) { tags += ";Bullying"; }
+             if(document.getElementById("kPTSD").checked) { tags += ";Post-Traumatic Stress Disorder"; }
+             if(document.getElementById("kSurvivor").checked) { tags += ";Survivor Services"; }
+             if(document.getElementById("kSelfHelp").checked) { tags += ";Self Help"; }
+             if(document.getElementById("kLicensed").checked) { tags += ";Licensed Provider"; }
+             if(document.getElementById("kHospital").checked) { tags += ";Hospital"; }
+             if(document.getElementById("kFitness").checked) { tags += ";Fitness"; }
+             if(document.getElementById("kNutrition").checked) { tags += ";Nutrition"; }
+             if(document.getElementById("kNonProfit").checked) { tags += ";Non-profit"; }
+             if(document.getElementById("kChild").checked) { tags += ";Child"; }
+             if(document.getElementById("kAdolescent").checked) { tags += ";Adolescent"; }
+             if(document.getElementById("kAdult").checked) { tags += ";Adult"; }
+             if(document.getElementById("kSenior").checked) { tags += ";Senior"; }
+             if(document.getElementById("kGroup").checked) { tags += ";Activity Group"; }
+             if(document.getElementById("kPeer").checked) { tags += ";Peer Support"; }
+             if(document.getElementById("kMilitary").checked) { tags += ";Military"; }
+             if(document.getElementById("kLGBT").checked) { tags += ";LGBTQIA"; }
+             if(document.getElementById("kVictim").checked) { tags += ";Victim"; }
+             if(document.getElementById("kEthnic").checked) { tags += ";Race / Ethnic Specific"; }
+             
+             // if(document.getElementById("kOther").checked) 
+             //{
+             //     var res = document.getElementById("kSpecify").value.replace(";", ",").split(",");
+             //     for(var i = 0; i < res.length; i++) { tags += ";" + res[i].trim(); }
+             // }
+            
+            if(tags.length > 0) { tags = tags.substring(1); }
+            c.Tags__c = tags;
+          
+              <!-- #PAGE3 update Case object data -->
+              c.First_Name__c = document.getElementById("firstName").value;
+              c.Last_Name__c = document.getElementById("lastName").value;
+              c.Title__c = document.getElementById("ctitle").value;
+              c.Email__c = document.getElementById("email").value;
+              c.Phone__c = document.getElementById("phone").value;
+              
+              <!-- if blank and contact name provided, copy service address -->
+              if(!valid(document.getElementById("street").value) 
+                  && (valid(document.getElementById("lastName").value) || valid(document.getElementById("email").value)))
+              {
+                  c.Mailing_Street__c = c.Service_Street__c;
+                  c.Mailing_City__c = c.Service_City__c;
+                  c.Mailing_State__c = c.Service_State__c;
+                  c.Mailing_Postal_Code__c = c.Service_Postal_Code__c;
+                  c.Mailing_Country__c = c.Service_Country__c;
+              }
+              else
+              {
+                  c.Mailing_Street__c = document.getElementById("street").value;
+                  c.Mailing_City__c = document.getElementById("city").value;
+                  c.Mailing_State__c = document.getElementById("state").value;
+                  c.Mailing_Postal_Code__c = document.getElementById("postalCode").value;
+                  c.Mailing_Country__c = document.getElementById("country")
+                              .options[document.getElementById("country").selectedIndex].value;
+              }
+
+              <!-- SUBMIT -->
+              <!-- inserts the Case object into the salesforce database -->
+              Visualforce.remoting.Manager.invokeAction(
+                  "{!$RemoteAction.MultiPageFormController.submit}",
+                  c, "Resource_Submission",
+                  function(result, event) { 
+                    if(event.statusCode === 200) {
+                      alert("Thank you for your submission!");
+                      location.reload();
+                    }
+
+                      } 
+                        );
+          
+      };
+
+function formSubmissionValidation(){
+
+              <!-- #Step1 field validation -->
+              if(
+                valid(document.getElementById("rscName").value)
+                && (
+                    
+                  valid(document.getElementById("website").value)
+                  && validWebsite(document.getElementById("website").value)
+                  && ((valid(document.getElementById("svcStreet").value)
+                          && valid(document.getElementById("svcCity").value)
+                          && valid(document.getElementById("svcState").value)
+                          && valid(document.getElementById("svcPostalCode").value)
+                          && document.getElementById("svcCountry").selectedIndex != 0
+                          && document.getElementById("svcCountry")
+                                  .options[document.getElementById("svcCountry").selectedIndex].value != "----")
+                      || (!valid(document.getElementById("svcStreet").value)
+                          && !valid(document.getElementById("svcCity").value)
+                          && !valid(document.getElementById("svcState").value)
+                          && !valid(document.getElementById("svcPostalCode").value)
+                          && document.getElementById("svcCountry").selectedIndex == 0
+                          )))
+              
+              <!-- #Step2 field validation -->
+              &&((document.getElementById("freeYes").checked || document.getElementById("freeNo").checked)
+                  && valid(document.getElementById("shortDesc").value)
+                  && valid(document.getElementById("longDesc").value)
+                  && valid(document.getElementById("svcHours").value)
+                  && (document.getElementById("langEnglish").checked 
+                      || document.getElementById("langSpanish").checked
+                  && (document.getElementById("kSuicide").checked || document.getElementById("kDepression").checked
+                      || document.getElementById("kBipolar").checked || document.getElementById("kAnxiety").checked
+                      || document.getElementById("kSubstance").checked || document.getElementById("kEating").checked
+                      || document.getElementById("kSelfHarm").checked || document.getElementById("kBullying").checked
+                      || document.getElementById("kPTSD").checked || document.getElementById("kSurvivor").checked
+                      || document.getElementById("kSelfHelp").checked || document.getElementById("kLicensed").checked
+                      || document.getElementById("kHospital").checked || document.getElementById("kFitness").checked
+                      || document.getElementById("kNutrition").checked || document.getElementById("kNonProfit").checked
+                      || document.getElementById("kChild").checked || document.getElementById("kAdolescent").checked
+                      || document.getElementById("kAdult").checked || document.getElementById("kSenior").checked
+                      || document.getElementById("kGroup").checked || document.getElementById("kPeer").checked
+                      || document.getElementById("kMilitary").checked || document.getElementById("kLGBT").checked
+                      || document.getElementById("kVictim").checked || document.getElementById("kEthnic").checked
+                  )))
+              
+              <!-- #Step3 field validation -->
+              <!-- no required fields, but Email and Address must be complete if non-blank -->
+              &&((!valid(document.getElementById("email").value)
+                      || validEmail(document.getElementById("email").value))
+                  && ((valid(document.getElementById("street").value)
+                          && valid(document.getElementById("city").value)
+                          && valid(document.getElementById("state").value)
+                          && valid(document.getElementById("postalCode").value)
+                          && document.getElementById("country").selectedIndex != 0
+                          && document.getElementById("country")
+                                  .options[document.getElementById("country").selectedIndex].value != "----")
+                      || (!valid(document.getElementById("street").value)
+                          && !valid(document.getElementById("city").value)
+                          && !valid(document.getElementById("state").value)
+                          && !valid(document.getElementById("postalCode").value)
+                          && document.getElementById("country").selectedIndex == 0))
+                  )
+              ){
+                  document.getElementById("submitPage3").disabled = false;
+                } else {
+                  document.getElementById("submitPage3").disabled = true;
+                }     
+      };
+
+    </script>
+  
+  
+</head>
+<body>
+
+    <!-- REQUIRED SLDS WRAPPER -->
+    <div class="slds-scope">
+
+        <!-- MASTHEAD -->
+
+        <p class="slds-text-heading--label slds-m-bottom--small">
+            This free global directory of wellness resources will be searchable by category, keyword and location. The focus is no- and low-cost services accessible to anyone. However, any service that is wellness focused is welcome to submit.
+        </p>
+        <!-- / MASTHEAD -->
+        <!-- PRIMARY CONTENT WRAPPER -->
+        <div class="myapp">
+            <!-- SECTION - BADGE COMPONENTS -->
+            <section aria-labelledby="badges">
+                <h2 id="badges" class="slds-text-heading--large slds-m-vertical--large">Resource Submission</h2>
+
+            </section>
+
+            <ul>
+
+                <li>
+                    <span class="slds-assistive-text">Task</span>
+                    <div class="slds-media">
+                        <div class="slds-media__body">
+                            <div class="slds-media slds-media--timeline slds-timeline__media--task">
+                                <div class="slds-media__figure slds-timeline__icon">
+                                    <div class="slds-icon_container">
+                                        <svg aria-hidden="true" class="slds-icon slds-icon--small slds-icon-standard-task"></svg>
+                                    </div>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-media">
+                                        <div class="slds-media__figure">
+
+                                        </div>
+                                        <div class="slds-media__body">
+                                            <p class="slds-truncate" title="Resource Name">Step 1 of 3 : Resource Name</p>
+                                            <br/>
+
+                                            <ul>
+
+                                                <!-- Required Fields -->
+
+                                                <li>
+                                                    <fieldset class="slds-form--compound">
+
+                                                        <div class="form-element__group">
+                                                            <div class="slds-form-element__row">
+                                                                <div class="slds-form-element slds-size--1-of-2">
+                                                                    <label class="slds-form-element__label" for="input-04">Resource Name<abbr class="slds-required" title="required">* </abbr></label>
+                                                                    <input onchange="formSubmissionValidation()" id="rscName" class="slds-input" type="text" />
+                                                                </div>
+                                                                <div class="slds-form-element slds-size--1-of-2">
+                                                                    <label class="slds-form-element__label" for="input-05">Resource Type<abbr class="slds-required" title="required">* </abbr></label>
+                                                                    <select onchange="formSubmissionValidation()" id="catSpecify" class="slds-select">
+                                                                        <option>General Wellness</option>
+                                                                        <option>Counseling</option>
+                                                                        <option>Crisis Line</option>
+                                                                        <option>Financial Services</option>
+                                                                        <option>Inpatient</option>
+                                                                        <option>Support Group</option>
+                                                                        <option>Advocacy</option>
+                                                                        <option>Service Animals</option>
+                                                                        <option>Community Center</option>
+                                                                        <option>Informational</option>
+                                                                        <option>Rehabilitation</option>
+                                                                        <option>Housing Services</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="slds-form-element slds-size--1-of-2">
+                                                            <label class="slds-form-element__label" for="input-05">Website<abbr class="slds-required" title="required">* </abbr></label>
+                                                            <input onchange="formSubmissionValidation()" id="website" class="slds-input" type="text" />
+                                                        </div>
+
+                                                        <div class="slds-form-element__row">
+                                                            <div class="slds-form-element slds-size--1-of-2">
+                                                                <label class="slds-form-element__label" for="input-04">Service Phone Number</label>
+                                                                <input id="svcPhone" class="slds-input" type="text" />
+                                                            </div>
+                                                            <div class="slds-form-element slds-size--1-of-2">
+                                                                <label class="slds-form-element__label" for="input-05">Crisis Line Phone Number (if applicable)</label>
+                                                                <input id="crisisPhone" class="slds-input" type="text" />
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </li>
+
+                                                <li>
+                                                    <fieldset class="slds-form--compound">
+                                                        <legend class="slds-form-element__label">Resource Address</legend>
+                                                        <div class="form-element__group">
+                                                            <div class="slds-form-element__row">
+                                                                <div class="slds-form-element slds-size--1-of-1">
+                                                                    <label class="slds-form-element__label" for="input-03">Street</label>
+                                                                    <input id="svcStreet" class="slds-input" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-form-element__row">
+                                                                <div class="slds-form-element slds-size--1-of-2">
+                                                                    <label class="slds-form-element__label" for="input-04">City</label>
+                                                                    <input id="svcCity" class="slds-input" type="text" />
+                                                                </div>
+                                                                <div class="slds-form-element slds-size--1-of-2">
+                                                                    <label class="slds-form-element__label" for="input-05">State</label>
+                                                                    <input id="svcState" class="slds-input" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-form-element__row">
+                                                                <div class="slds-form-element slds-size--1-of-2">
+                                                                    <label class="slds-form-element__label" for="input-06">ZIP Code</label>
+                                                                    <input id="svcPostalCode" class="slds-input" type="text" />
+                                                                </div>
+
+                                                                <div class="slds-form-element slds-size--1-of-2">
+                                                                    <label class="slds-form-element__label" for="input-05">Country</label>
+                                                                    <select id="svcCountry" class="slds-select">
+                                                                          <apex:repeat value="{!countries}" var="cc">
+                                                                            <option value="{!cc}">{!cc}</option>
+                                                                          </apex:repeat>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </li>
+
+                                                <li>
+
+                                                    <fieldset class="slds-form-element">
+                                                        <legend class="form-element__legend slds-form-element__label">Is this facility accessible to those with disabilities?</legend>
+                                                        <div class="slds-form-element__control">
+                                                            <label class="slds-radio">
+                                                                <input id="accessYes" type="radio" name="options" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">Yes</span>
+                                                            </label>
+                                                            <label class="slds-radio">
+                                                                <input type="radio" name="options" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">No</span>
+                                                            </label>
+                                                        </div>
+                                                    </fieldset>
+
+                                                </li>
+
+                                                <li>
+
+                                                    <fieldset class="slds-form-element">
+                                                        <legend class="form-element__legend slds-form-element__label">Is this facility a safe haven?</legend>
+                                                        <div class="slds-form-element__control">
+                                                            <label class="slds-radio">
+                                                                <input id="havenYes" type="radio" name="options1" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">Yes</span>
+                                                            </label>
+                                                            <label class="slds-radio">
+                                                                <input type="radio" name="options1" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">No</span>
+                                                            </label>
+                                                        </div>
+                                                    </fieldset>
+
+                                                </li>
+
+                                                <li>
+
+                                                    <fieldset class="slds-form-element">
+                                                        <legend class="form-element__legend slds-form-element__label">Are counseling services accessible via phone?</legend>
+                                                        <div class="slds-form-element__control">
+                                                            <label class="slds-radio">
+                                                                <input id="cphoneYes" type="radio" name="options2" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">Yes</span>
+                                                            </label>
+                                                            <label class="slds-radio">
+                                                                <input type="radio" name="options2" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">No</span>
+                                                            </label>
+                                                        </div>
+                                                    </fieldset>
+
+                                                </li>
+
+                                                <li>
+
+                                                    <fieldset class="slds-form-element">
+                                                        <legend class="form-element__legend slds-form-element__label">Are services available online?</legend>
+                                                        <div class="slds-form-element__control">
+                                                            <label class="slds-radio">
+                                                                <input id="onlineYes" type="radio" name="options3" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">Yes</span>
+                                                            </label>
+                                                            <label class="slds-radio">
+                                                                <input type="radio" name="options3" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">No</span>
+                                                            </label>
+                                                        </div>
+                                                    </fieldset>
+
+                                                </li>
+
+                                                <li>
+
+                                                    <fieldset class="slds-form-element">
+                                                        <legend class="form-element__legend slds-form-element__label">Is live chat accessible online?</legend>
+
+                                                        <div class="slds-form-element__control">
+                                                            <label class="slds-radio">
+                                                                <input id="chatYes" type="radio" name="options4" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">Yes</span>
+                                                            </label>
+                                                            <label class="slds-radio">
+                                                                <input type="radio" name="options4" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">No</span>
+                                                            </label>
+                                                        </div>
+
+                                                    </fieldset>
+
+                                                </li>
+
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+
+            </ul>
+
+            <ul>
+
+                <li>
+                    <span class="slds-assistive-text">Task</span>
+                    <div class="slds-media">
+                        <div class="slds-media__body">
+                            <div class="slds-media slds-media--timeline slds-timeline__media--task">
+                                <div class="slds-media__figure slds-timeline__icon">
+                                    <div class="slds-icon_container">
+                                        <svg aria-hidden="true" class="slds-icon slds-icon--small slds-icon-standard-task"></svg>
+                                    </div>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-media">
+                                        <div class="slds-media__figure">
+
+                                        </div>
+                                        <div class="slds-media__body">
+                                            <p class="slds-truncate" title="Resource Details">Step 2 of 3 : Resource Details</p>
+
+                                            <br/>
+
+                                            <ul>
+
+                                                <li>
+
+                                                    <fieldset class="slds-form-element">
+                                                        <legend class="form-element__legend slds-form-element__label">Is this service free/low-cost to those who qualify?<abbr class="slds-required" title="required">* </abbr></legend>
+                                                        <div class="slds-form-element__control">
+                                                            <label class="slds-radio">
+                                                                <input onchange="formSubmissionValidation()" type="radio" name="options5" id="freeYes" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">Yes</span>
+                                                            </label>
+                                                            <label class="slds-radio">
+                                                                <input type="radio" name="options5" id="freeNo" />
+                                                                <span class="slds-radio--faux"></span>
+                                                                <span class="slds-form-element__label">No</span>
+                                                            </label>
+                                                        </div>
+                                                    </fieldset>
+
+                                                    <div class="slds-form-element slds-size--1-of-2">
+                                                        <label class="slds-form-element__label" for="input-06">Short description of service<abbr class="slds-required" title="required">* </abbr></label>
+                                                        <input onchange="formSubmissionValidation()" id="shortDesc" class="slds-input" type="text" />
+                                                    </div>
+
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-form-element__label" for="textareaSample2">Describe this service in more detail<abbr class="slds-required" title="required">* </abbr></label>
+                                                        <div class="slds-form-element__control">
+                                                            <textarea onchange="formSubmissionValidation()" id="longDesc" class="slds-textarea"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-form-element__label" for="textareaSample2">Service days/hours<abbr class="slds-required" title="required">* </abbr></label>
+                                                        <div class="slds-form-element__control">
+                                                            <textarea onchange="formSubmissionValidation()" id="svcHours" class="slds-textarea"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <fieldset class="slds-form-element">
+                                                        <legend class="slds-form-element__legend slds-form-element__label">Languages<abbr class="slds-required" title="required">* </abbr></legend>
+
+                                                        <div class="slds-form-element__control">
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="langEnglish" value="langEnglish" />
+                                                                <label class="slds-checkbox__label" for="langEnglish">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">English</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="langSpanish" value="langSpanish" />
+                                                                <label class="slds-checkbox__label" for="langSpanish">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Spanish</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                    </fieldset>
+
+                                                    <fieldset class="slds-form-element">
+                                                        <legend class="slds-form-element__legend slds-form-element__label">Select Keywords<abbr class="slds-required" title="required">* </abbr></legend>
+
+                                                        <div class="slds-form-element__control">
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kSuicide" value="kSuicide" />
+                                                                <label class="slds-checkbox__label" for="kSuicide">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Suicide</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kDepression" value="kDepression" />
+                                                                <label class="slds-checkbox__label" for="kDepression">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Depression</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kBipolar" value="kBipolar" />
+                                                                <label class="slds-checkbox__label" for="kBipolar">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Bipolar</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kAnxiety" value="kAnxiety" />
+                                                                <label class="slds-checkbox__label" for="kAnxiety">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Anxiety</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kSubstance" value="kSubstance" />
+                                                                <label class="slds-checkbox__label" for="kSubstance">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Substance Use</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kEating" value="kEating" />
+                                                                <label class="slds-checkbox__label" for="kEating">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Eating Disorder</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kSelfHarm" value="kSelfHarm" />
+                                                                <label class="slds-checkbox__label" for="kSelfHarm">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Self Harm</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kBullying" value="kBullying" />
+                                                                <label class="slds-checkbox__label" for="kBullying">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Bullying</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kPTSD" value="kPTSD" />
+                                                                <label class="slds-checkbox__label" for="kPTSD">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Post-Traumatic Stress Disorder</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kSurvivor" value="kSurvivor" />
+                                                                <label class="slds-checkbox__label" for="kSurvivor">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Survivor Services</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kSelfHelp" value="kSelfHelp" />
+                                                                <label class="slds-checkbox__label" for="kSelfHelp">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Self Help</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kLicensed" value="kLicensed" />
+                                                                <label class="slds-checkbox__label" for="kLicensed">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Licensed Provider</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kHospital" value="kHospital" />
+                                                                <label class="slds-checkbox__label" for="kHospital">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Hospital</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kFitness" value="kFitness" />
+                                                                <label class="slds-checkbox__label" for="kFitness">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Fitness</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kNutrition" value="kNutrition" />
+                                                                <label class="slds-checkbox__label" for="kNutrition">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Nutrition</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kNonProfit" value="kNonProfit" />
+                                                                <label class="slds-checkbox__label" for="kNonProfit">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Non-profit</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kChild" value="kChild" />
+                                                                <label class="slds-checkbox__label" for="kChild">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Child</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kAdolescent" value="kAdolescent" />
+                                                                <label class="slds-checkbox__label" for="kAdolescent">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Adolescent</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kAdult" value="kAdult" />
+                                                                <label class="slds-checkbox__label" for="kAdult">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Adult</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kSenior" value="kSenior" />
+                                                                <label class="slds-checkbox__label" for="kSenior">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Senior</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kGroup" value="kGroup" />
+                                                                <label class="slds-checkbox__label" for="kGroup">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Activity Group</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kPeer" value="kPeer" />
+                                                                <label class="slds-checkbox__label" for="kPeer">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Peer Support</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kMilitary" value="kMilitary" />
+                                                                <label class="slds-checkbox__label" for="kMilitary">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Military</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kLGBT" value="kLGBT" />
+                                                                <label class="slds-checkbox__label" for="kLGBT">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">LGBTQIA</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kVictim" value="kVictim" />
+                                                                <label class="slds-checkbox__label" for="kVictim">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Victim</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="slds-checkbox">
+                                                                <input onchange="formSubmissionValidation()" type="checkbox" name="default" id="kEthnic" value="kEthnic" />
+                                                                <label class="slds-checkbox__label" for="kEthnic">
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label">Race / Ethnic Specific</span>
+                                                                </label>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </fieldset>
+
+                                                </li>
+
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </li>
+
+            </ul>
+
+            <ul>
+
+                <li>
+                    <span class="slds-assistive-text">Task</span>
+                    <div class="slds-media">
+                        <div class="slds-media__body">
+                            <div class="slds-media slds-media--timeline slds-timeline__media--task">
+                                <div class="slds-media__figure slds-timeline__icon">
+                                    <div class="slds-icon_container">
+                                        <svg aria-hidden="true" class="slds-icon slds-icon--small slds-icon-standard-task"></svg>
+                                    </div>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-media">
+                                        <div class="slds-media__figure">
+
+                                        </div>
+                                        <div class="slds-media__body">
+                                            <p class="slds-truncate" title="Resource Details">Step 3 of 3 : Primary Contact</p>
+
+                                            <br/>
+
+                                            <ul>
+
+                                                <!--          -->
+
+                                                <li>
+
+                                                    <li>
+                                                        <fieldset class="slds-form--compound">
+
+                                                            <div class="form-element__group">
+
+                                                                <div class="slds-form-element__row">
+                                                                    <div class="slds-form-element slds-size--1-of-2">
+                                                                        <label class="slds-form-element__label" for="input-04">First Name</label>
+                                                                        <input id="firstName" class="slds-input" type="text" />
+                                                                    </div>
+                                                                    <div class="slds-form-element slds-size--1-of-2">
+                                                                        <label class="slds-form-element__label" for="input-05">Last Name</label>
+                                                                        <input id="lastName" class="slds-input" type="text" />
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </fieldset>
+                                                    </li>
+
+                                                </li>
+
+                                                <li>
+
+                                                    <div class="slds-form-element slds-size--1-of-2">
+                                                        <label class="slds-form-element__label" for="input-06">Title</label>
+                                                        <input id="ctitle" class="slds-input" type="text" />
+                                                    </div>
+
+                                                    <div class="slds-form-element slds-size--1-of-2">
+                                                        <label class="slds-form-element__label" for="input-06">Email</label>
+                                                        <input id="email" class="slds-input" type="text" />
+                                                    </div>
+                                                    <div class="slds-form-element slds-size--1-of-2">
+                                                        <label class="slds-form-element__label" for="input-06">Phone Number</label>
+                                                        <input id="phone" class="slds-input" type="text" />
+                                                    </div>
+
+                                                </li>
+
+                                                <li>
+                                                    <fieldset class="slds-form--compound">
+
+                                                        <div class="form-element__group">
+                                                            <div class="slds-form-element__row">
+                                                                <div class="slds-form-element slds-size--1-of-1">
+                                                                    <label class="slds-form-element__label" for="input-03">Address(leave blank if same as service address)</label>
+                                                                    <input id="street" class="slds-input" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-form-element__row">
+                                                                <div class="slds-form-element slds-size--1-of-2">
+                                                                    <label class="slds-form-element__label" for="input-04">City</label>
+                                                                    <input id="city" class="slds-input" type="text" />
+                                                                </div>
+                                                                <div class="slds-form-element slds-size--1-of-2">
+                                                                    <label class="slds-form-element__label" for="input-05">State</label>
+                                                                    <input id="state" class="slds-input" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-form-element__row">
+                                                                <div class="slds-form-element slds-size--1-of-2">
+                                                                    <label class="slds-form-element__label" for="input-06">ZIP Code</label>
+                                                                    <input id="postalCode" class="slds-input" type="text" />
+                                                                </div>
+
+                                                                <div class="slds-form-element slds-size--1-of-2">
+                                                                    <label class="slds-form-element__label" for="input-05">Country</label>
+                                                                    <select id="country" class="slds-select">
+                                                                          <apex:repeat value="{!countries}" var="cc">
+                                                                            <option value="{!cc}">{!cc}</option>
+                                                                          </apex:repeat>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </li>
+
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </li>
+
+                <br/>
+                <br/>
+
+                <button class="slds-button slds-button--neutral slds-align_absolute-center" disabled="true" type="button" id="submitPage3" value="Submit" onclick="updateCase();">Submit</button>
+
+            </ul>
+
+            <!-- / SECTION - BADGE COMPONENTS -->
+        </div>
+        <!-- / PRIMARY CONTENT WRAPPER -->
+    </div>
+    <!-- / REQUIRED SLDS WRAPPER -->
+</body>
+</html>
+</apex:page>

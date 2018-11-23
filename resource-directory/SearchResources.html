@@ -96,7 +96,6 @@
           if(valid(document.getElementById("location").value))
           {
               var geocoder = new google.maps.Geocoder();
-
               geocoder.geocode({address: document.getElementById("location").value}, 
                   function(results, status)
                   {
@@ -128,10 +127,8 @@
           {
               document.getElementById("resultsHelp").innerHTML = "";
           }
-
           firstSearch = false;      
       };
-
       function search()
       {
           var query = "select Id, Name, Short_Description__c, Location__latitude__s, Location__longitude__s";
@@ -143,7 +140,6 @@
                   + document.getElementById("category").options[document.getElementById("category").selectedIndex].value
                   + "'";
           }
-
           if(document.getElementById("accessible").checked) { query += " and Accessible_to_Disabled__c = true"; }
           if(document.getElementById("safeHaven").checked) { query += " and Safe_Haven__c = true"; }
           if(document.getElementById("viaPhone").checked) { query += " and Counseling_by_Phone__c = true"; }
@@ -212,7 +208,7 @@
       <!-- HEADER layout -->
       <br/>
       <h2 style="margin-left:0.67em; font-size:1.5em;">RESOURCE DIRECTORY</h2>
-      <p style="margin-left:1em; width:70em;">
+      <p style="margin-left:1em;">
           Welcome to our database of free mental wellness services. 
           This ever-growing database is free to use and accessible 24/7/365.
           <br/>
@@ -222,14 +218,12 @@
       <div style="border-style:none none dotted none; border-width:thin; margin:1em;"/>
       
       <section>
-        <div class="rsc" style="width:72.5em; height:28em;">
+        <div style="display: flex;flex-wrap: wrap; width:72.5vw; height:100%;">
           <br/>
-          <h2 style="margin:0.83em; font-size:1.2em;">Search Parameters</h2>
           <br/>
-
           <div style="border-style:none none solid none; border-color:LightGray; margin:1em 0em 1em 0em; border-width:thin;"/>
           
-          <div style="display:inline-block; width:30em; height:15em; float:left;">
+          <div style="display: flex; flex-grow: 1; justify-content: center; display:inline-block; width:30em; height:15em; float:left;">
               <label for="category" style="display:inline; font-weight:bold;">Primary Category</label>
                   <select id="category" style="display:inline; width:12em;" onchange="search();">
                       <option value=""></option>
@@ -267,7 +261,7 @@
               <br/>
           </div>
 
-          <div style="display:inline-block; width:40em; height:15em; float:left;">
+           <div style="display: flex; flex-grow: 1; justify-content: center; display:inline-block; width:40em; height:100%;">
               <label style="font-weight:bold;">Search by Keyword</label>
               <br style="line-height:25%;"/>
               <input type="checkbox" id="suicide" style="display:inline;" onchange="search();"/>
@@ -389,7 +383,6 @@
                     }
             
                     resultsHelp({!size});
-
                 </script>
             </apex:outputPanel>
         </div>

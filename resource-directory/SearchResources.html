@@ -1,5 +1,4 @@
-<apex:page 
-  controller="ResourceController_Search" 
+<apex:page controller="ResourceController_Search" 
   title="Resource Directory" 
   sidebar="false" 
   showHeader="false" 
@@ -229,316 +228,202 @@
 
 </head>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <body>
   <!-- REQUIRED SLDS WRAPPER -->
   <div class="slds-scope">
     <!-- MASTHEAD -->
     <p class="slds-text-heading--label slds-m-bottom--small">
-      Salesforce Lightning Design System Trailhead Module
+      Welcome to our database of free mental wellness services. This ever-growing database is free to use and accessible 24/7/365. 
+      Do you know of a great service in your area? Please <a href="{!$Page.Resource_Submission}">add it here</a>. 
     </p>
-    <!-- / MASTHEAD -->
-    <!-- PRIMARY CONTENT WRAPPER -->
+
     <div class="myapp">
-      <!-- SECTION - BADGE COMPONENTS -->
-      <section aria-labelledby="badges">
-        <h2 id="badges" class="slds-text-heading--large slds-m-vertical--large">Badges</h2>
-        <div>
-          <span class="slds-badge">Badge</span>
-          <span class="slds-badge slds-theme--inverse">Badge</span>
-        </div>
-      </section>
-      <!-- / SECTION - BADGE COMPONENTS -->
+      <div style="height: 660px;">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+  <div class="slds-grid slds-has-coordinates" style="display: flex;flex-wrap: wrap; width: 70vw">
+    <div class="slds-map_container">
+      <div class="slds-map">
+        <iframe id="GoogleMapID" title="Google Maps iframe" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAtCW0TXBOXDh0jP1q58ZWNMID0ZYOg32w&q=place_id:ChIJsTvHHKUsDogRTN4FQXxpP-U"></iframe>
+      </div>
+    </div>
+    <div class="slds-coordinates">
+      <div class="slds-coordinates__header">
+        <h2 class="slds-coordinates__title">Salesforce Locations In United States (9)</h2>
+      </div>
+      <ul class="slds-coordinates__list">
+        <li class="slds-coordinates__item">
+          <span class="slds-assistive-text" aria-live="polite"></span>
+          <button class="slds-coordinates__item-action slds-button_reset slds-media" aria-pressed="false">
+            <span class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-account" title="Description of icon when needed">
+                <svg class="slds-icon" aria-hidden="true">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account" />
+                </svg>
+                <span class="slds-assistive-text">Description of icon when needed</span>
+              </span>
+            </span>
+            <span class="slds-media__body">
+              <span class="slds-text-link">Worldwide Corporate Headquarters</span>
+              <span>The Landmark @ One Market, San Francisco, CA</span>
+            </span>
+          </button>
+        </li>
+        <li class="slds-coordinates__item">
+          <span class="slds-assistive-text" aria-live="polite"></span>
+          <button class="slds-coordinates__item-action slds-button_reset slds-media" aria-pressed="false">
+            <span class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-account" title="Description of icon when needed">
+                <svg class="slds-icon" aria-hidden="true">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account" />
+                </svg>
+                <span class="slds-assistive-text">Description of icon when needed</span>
+              </span>
+            </span>
+            <span class="slds-media__body">
+              <span class="slds-text-link">salesforce.com inc Atlanta</span>
+              <span>950 East Paces Ferry Road NE, Atlanta, GA</span>
+            </span>
+          </button>
+        </li>
+        <li class="slds-coordinates__item">
+          <span class="slds-assistive-text" aria-live="polite"></span>
+          <button class="slds-coordinates__item-action slds-button_reset slds-media" aria-pressed="false">
+            <span class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-account" title="Description of icon when needed">
+                <svg class="slds-icon" aria-hidden="true">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account" />
+                </svg>
+                <span class="slds-assistive-text">Description of icon when needed</span>
+              </span>
+            </span>
+            <span class="slds-media__body">
+              <span class="slds-text-link">salesforce.com inc Bellevue</span>
+              <span>929 108th Ave NE, Bellevue, WA</span>
+            </span>
+          </button>
+        </li>
+        <li class="slds-coordinates__item">
+          <span class="slds-assistive-text" aria-live="polite"></span>
+          <button class="slds-coordinates__item-action slds-button_reset slds-media" aria-pressed="false">
+            <span class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-account" title="Description of icon when needed">
+                <svg class="slds-icon" aria-hidden="true">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account" />
+                </svg>
+                <span class="slds-assistive-text">Description of icon when needed</span>
+              </span>
+            </span>
+            <span class="slds-media__body">
+              <span class="slds-text-link">salesforce.com inc Boston</span>
+              <span>500 Boylston Street 19th Floor, Boston, MA</span>
+            </span>
+          </button>
+        </li>
+        <li class="slds-coordinates__item">
+          <span class="slds-assistive-text" aria-live="polite"></span>
+          <button class="slds-coordinates__item-action slds-button_reset slds-media" aria-pressed="false">
+            <span class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-account" title="Description of icon when needed">
+                <svg class="slds-icon" aria-hidden="true">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account" />
+                </svg>
+                <span class="slds-assistive-text">Description of icon when needed</span>
+              </span>
+            </span>
+            <span class="slds-media__body">
+              <span class="slds-text-link">salesforce.com inc Chicago</span>
+              <span>111 West Illinois Street, Chicago, IL</span>
+            </span>
+          </button>
+        </li>
+        <li class="slds-coordinates__item">
+          <span class="slds-assistive-text" aria-live="polite"></span>
+          <button class="slds-coordinates__item-action slds-button_reset slds-media" aria-pressed="false">
+            <span class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-account" title="Description of icon when needed">
+                <svg class="slds-icon" aria-hidden="true">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account" />
+                </svg>
+                <span class="slds-assistive-text">Description of icon when needed</span>
+              </span>
+            </span>
+            <span class="slds-media__body">
+              <span class="slds-text-link">salesforce.com inc Herndon</span>
+              <span>2550 Wasser Terrace, Herndon, VA</span>
+            </span>
+          </button>
+        </li>
+        <li class="slds-coordinates__item">
+          <span class="slds-assistive-text" aria-live="polite"></span>
+          <button class="slds-coordinates__item-action slds-button_reset slds-media" aria-pressed="false">
+            <span class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-account" title="Description of icon when needed">
+                <svg class="slds-icon" aria-hidden="true">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account" />
+                </svg>
+                <span class="slds-assistive-text">Description of icon when needed</span>
+              </span>
+            </span>
+            <span class="slds-media__body">
+              <span class="slds-text-link">salesforce.com inc Hillsboro</span>
+              <span>2035 NE Cornelius Pass Road, Hillsboro, OR</span>
+            </span>
+          </button>
+        </li>
+        <li class="slds-coordinates__item">
+          <span class="slds-assistive-text" aria-live="polite"></span>
+          <button class="slds-coordinates__item-action slds-button_reset slds-media" aria-pressed="false">
+            <span class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-account" title="Description of icon when needed">
+                <svg class="slds-icon" aria-hidden="true">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account" />
+                </svg>
+                <span class="slds-assistive-text">Description of icon when needed</span>
+              </span>
+            </span>
+            <span class="slds-media__body">
+              <span class="slds-text-link">salesforce.com inc Indy</span>
+              <span>111 Monument Circle, Indianapolis, IN</span>
+            </span>
+          </button>
+        </li>
+        <li class="slds-coordinates__item">
+          <span class="slds-assistive-text" aria-live="polite"></span>
+          <button class="slds-coordinates__item-action slds-button_reset slds-media" aria-pressed="false">
+            <span class="slds-media__figure">
+              <span class="slds-icon_container slds-icon-standard-account" title="Description of icon when needed">
+                <svg class="slds-icon" aria-hidden="true">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account" />
+                </svg>
+                <span class="slds-assistive-text">Description of icon when needed</span>
+              </span>
+            </span>
+            <span class="slds-media__body">
+              <span class="slds-text-link">salesforce.com inc Irvine</span>
+              <span>300 Spectrum Center Drive, Irvine, CA</span>
+            </span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
     </div>
     <!-- / PRIMARY CONTENT WRAPPER -->
   </div>
   <!-- / REQUIRED SLDS WRAPPER -->
 </body>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <apex:pageBlock mode="edit">
-      <!-- HEADER layout -->
-      <br/>
-      <h2 style="margin-left:0.67em; font-size:1.5em;">RESOURCE DIRECTORY</h2>
-      <p style="margin-left:1em; width:70em;">
-          Welcome to our database of free mental wellness services. 
-          This ever-growing database is free to use and accessible 24/7/365.
-          <br/>
-          Do you know of a great service in your area?  Please 
-          <a href="{!$Page.Resource_Submission}">add it here</a>.
-      </p>
-      <div style="border-style:none none dotted none; border-width:thin; margin:1em;"/>
-      
-      <section>
-        <div class="rsc" style="width:72.5em; height:28em;">
-          <br/>
-          <h2 style="margin:0.83em; font-size:1.2em;">Search Parameters</h2>
-          <br/>
-
-          <div style="border-style:none none solid none; border-color:LightGray; margin:1em 0em 1em 0em; border-width:thin;"/>
-          
-          <div style="display:inline-block; width:30em; height:15em; float:left;">
-              <label for="category" style="display:inline; font-weight:bold;">Primary Category</label>
-                  <select id="category" style="display:inline; width:12em;" onchange="search();">
-                      <option value=""></option>
-                      <option value="Counseling">Counseling</option>
-                      <option value="Crisis Line">Crisis Line</option>
-                      <option value="Financial Services">Financial Services</option>
-                      <option value="Inpatient">Inpatient</option>
-                      <option value="Support Group">Support Group</option>
-                      <option value="Advocacy">Advocacy</option>
-                      <option value="Service Animals">Service Animals</option>
-                      <option value="Community Center">Community Center</option>
-                      <option value="Informational">Informational</option>
-                      <option value="General Wellness">General Wellness</option>
-                      <option value="Rehabilitation">Rehabilitation</option>
-                      <option value="Housing Services">Housing Services</option>
-                  </select><br/>
-              <br/>
-              <label style="font-weight:bold;">Services Available</label>
-              <br style="line-height:25%;"/>
-              <input type="checkbox" id="affordable" style="display:inline;" onchange="search();"/>
-              <label for="affordable" class="cb">Free or low-cost to those who qualify</label><br/>
-              <input type="checkbox" id="accessible" style="display:inline;" onchange="search();"/>
-              <label for="accessible" class="cb">Accessible to those with disabilites</label><br/>
-              <input type="checkbox" id="viaPhone" style="display:inline;" onchange="search();"/>
-              <label for="viaPhone" class="cb">Counseling services accessible via phone</label><br/>
-              <input type="checkbox" id="onlineSvc" style="display:inline;" onchange="search();"/>
-              <label for="onlineSvc" class="cb">Services available online</label><br/>
-              <input type="checkbox" id="liveChat" style="display:inline;" onchange="search();"/>
-              <label for="liveChat" class="cb">Live chat available</label><br/>
-              <input type="checkbox" id="safeHaven" style="display:inline;" onchange="search();"/>
-              <label for="safeHaven" class="cb">Safe haven</label><br/>
-              <br style="line-height:25%;"/>
-              <label for="language" style="display:inline;">Language</label>
-              <input type="text" id="language" style="display:inline; width:12em;" onchange="search();"/><br/>
-              <br/>
-          </div>
-
-          <div style="display:inline-block; width:40em; height:15em; float:left;">
-              <label style="font-weight:bold;">Search by Keyword</label>
-              <br style="line-height:25%;"/>
-              <input type="checkbox" id="suicide" style="display:inline;" onchange="search();"/>
-              <label for="suicide" class="cb cbtab">Suicide</label>
-              <input type="checkbox" id="depression" style="display:inline;" onchange="search();"/>
-              <label for="depression" class="cb cbtab">Depression</label>
-              <input type="checkbox" id="bipolar" style="display:inline;" onchange="search();"/>
-              <label for="bipolar" class="cb cbtab">Bipolar</label>
-              <br/>
-              <input type="checkbox" id="anxiety" style="display:inline;" onchange="search();"/>
-              <label for="anxiety" class="cb cbtab">Anxiety</label>
-              <input type="checkbox" id="substanceUse" style="display:inline;" onchange="search();"/>
-              <label for="substanceUse" class="cb cbtab">Substance Use</label>
-              <input type="checkbox" id="eatingDisorder" style="display:inline;" onchange="search();"/>
-              <label for="eatingDisorder" class="cb cbtab">Eating Disorder</label>
-              <br/>
-              <input type="checkbox" id="selfHarm" style="display:inline;" onchange="search();"/>
-              <label for="selfHarm" class="cb cbtab">Self Harm</label>
-              <input type="checkbox" id="bullying" style="display:inline;" onchange="search();"/>
-              <label for="bullying" class="cb cbtab">Bullying</label>
-              <input type="checkbox" id="ptsd" style="display:inline;" onchange="search();"/>
-              <label for="ptsd" class="cb cbtab">PTSD</label>
-              <br/>
-              <input type="checkbox" id="survivor" style="display:inline;" onchange="search();"/>
-              <label for="survivor" class="cb cbtab">Survivor Services</label>
-              <input type="checkbox" id="selfHelp" style="display:inline;" onchange="search();"/>
-              <label for="selfHelp" class="cb cbtab">Self Help</label>
-              <input type="checkbox" id="provider" style="display:inline;" onchange="search();"/>
-              <label for="provider" class="cb cbtab">Licensed Provider</label>
-              <br/>
-              <input type="checkbox" id="hospital" style="display:inline;" onchange="search();"/>
-              <label for="hospital" class="cb cbtab">Hospital</label>
-              <input type="checkbox" id="fitness" style="display:inline;" onchange="search();"/>
-              <label for="fitness" class="cb cbtab">Fitness</label>
-              <input type="checkbox" id="nutrition" style="display:inline;" onchange="search();"/>
-              <label for="nutrition" class="cb cbtab">Nutrition</label>
-              <br/>
-              <input type="checkbox" id="nonprofit" style="display:inline;" onchange="search();"/>
-              <label for="nonprofit" class="cb cbtab">Non-profit</label>
-              <input type="checkbox" id="child" style="display:inline;" onchange="search();"/>
-              <label for="child" class="cb cbtab">Child</label>
-              <input type="checkbox" id="adolescent" style="display:inline;" onchange="search();"/>
-              <label for="adolescent" class="cb cbtab">Adolescent</label>
-              <br/>
-              <input type="checkbox" id="adult" style="display:inline;" onchange="search();"/>
-              <label for="adult" class="cb cbtab">Adult</label>
-              <input type="checkbox" id="senior" style="display:inline;" onchange="search();"/>
-              <label for="senior" class="cb cbtab">Senior</label>
-              <input type="checkbox" id="activityGroup" style="display:inline;" onchange="search();"/>
-              <label for="activityGroup" class="cb cbtab">Activity Group</label>
-              <br/>
-              <input type="checkbox" id="peerSupport" style="display:inline;" onchange="search();"/>
-              <label for="peerSupport" class="cb cbtab">Peer Support</label>
-              <input type="checkbox" id="military" style="display:inline;" onchange="search();"/>
-              <label for="military" class="cb cbtab">Military</label>
-              <input type="checkbox" id="lgbtqia" style="display:inline;" onchange="search();"/>
-              <label for="lgbtqia" class="cb cbtab">LGBTQIA</label>
-              <br/>
-              <input type="checkbox" id="victim" style="display:inline;" onchange="search();"/>
-              <label for="victim" class="cb cbtab">Victim</label>
-              <input type="checkbox" id="raceEthnic" style="display:inline;" onchange="search();"/>
-              <label for="raceEthnic" class="cb">Race/Ethnic Specific</label>
-              <br/>
-          </div>
-          
-          <br style="clear:both;"/>
-          <div style="border-style:none none solid none; border-color:LightGray; margin:1em 0em 1em 0em; border-width:thin;"/>
-
-          <div>
-              <label style="font-weight:bold;">Search by Location</label>
-              <br style="line-height:25%;"/>
-              <label for="location" style="display:inline;">Location</label>
-              <input type="text" id="location" style="display:inline; width:12em;" onchange="updateLocation();"/><br/>
-              <label style="display:inline;">Show results within </label>
-                  <select id="radius" style="display:inline; margin-left:0em;" onchange="if(validLoc) { search(); }">
-                      <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                      <option value="100">100</option>
-                  </select>
-              <label class="cb">miles</label><br/>
-              <br/>
-          </div>
-          
-        </div>
-        <br style="clear:both;"/>
-      </section>
-      
-      <br style="line-height:50%;"/>
-      <label id="resultsHelp" style="font-weight:bold; margin-left:1.5em;"/>
-      <br style="line-height:50%;"/>
-      
-      <section>
-        <div class="rsc" style="width:30em; height:53em;">
-            <apex:outputPanel id="results">
-                <apex:pageBlockTable value="{!resources}" var="resource" style="margin:0em; width:30em;">
-                  <apex:column >
-                    <apex:facet name="header"><apex:outputLabel style="text-align:left; font-size:1.3em; margin-left:0.5em;" value="Search Results"/></apex:facet>
-                    <apex:outputLink value="{!$Page.Resource_Info}?id={!resource.Id}" 
-                                     onclick="window.open(this.href, '', 'width=480,height=480'); return false;"
-                                     title="{!resource.Short_Description__c}">
-                            {!resource.Name}
-                    </apex:outputLink>
-                  </apex:column>
-                </apex:pageBlockTable>
-                <apex:repeat value="{!resources}" var="resource">
-                  <script>
-                    if(validLoc)
-                    {
-                        addMarker("{!resource.Name}", "{!resource.Id}", "{!resource.Location__Latitude__s}",
-                                        "{!resource.Location__Longitude__s}", "{!resource.Short_Description__c}");
-                    }
-                  </script>
-                </apex:repeat>
-                <script>
-                    if(validLoc)
-                    {
-                        centerMap();
-                    }
-            
-                    resultsHelp({!size});
-
-                </script>
-            </apex:outputPanel>
-        </div>
-        
-        <div class="rsc" style="width:41em; height:53em;">
-
-            <div id="map" style="width:100%; height:100%;"/>
-        </div>
-
-      <br style="clear:both;"/>
-      </section>
-      
-      <br/>
-
-    </apex:pageBlock>
-
-  </apex:form>
-
-
-
-
-
-
-
-
-
+</apex:form>
 </html>
-
-
 </apex:page>

@@ -1,4 +1,10 @@
-<apex:page controller="ResourceController_Search" title="Resource Directory" sidebar="false" showHeader="false">
+<apex:page 
+controller="ResourceController_Search" 
+title="Resource Directory" 
+sidebar="false" 
+showHeader="false"
+standardStylesheets="false"
+>
   
   <apex:stylesheet value="{!$Resource.FormStyles}"/>
 
@@ -151,7 +157,6 @@
           {
               query += " and Available_Languages__c like '%" + document.getElementById("language").value + "%'";
           }
-
           if(document.getElementById("categoryKeyword").selectedIndex != 0)
           {
               query += " and Tags__c includes ('"
@@ -395,8 +400,8 @@
       <label id="resultsHelp" style="font-weight:bold; margin-left:1.5em;"/>
       <br style="line-height:50%;"/>
       
-       <div style ="display: flex; justify-content: center; align-items: center; flex-direction: row;"> 
-        <div class="rsc" style="width:30vw; height:53em; display: flex; flex-grow: 1;" >
+       <!--<div style ="display: flex; justify-content: center; align-items: center; flex-direction: row;">--> 
+        <div class="" style="width:30vw; height:53em; display: flex; flex-grow: 1;" >
             <apex:outputPanel id="results">
                 <apex:pageBlockTable value="{!resources}" var="resource" style="margin:0em; width:30em;">
                   <apex:column >
@@ -428,13 +433,13 @@
             </apex:outputPanel>
         </div>
         
-        <div class="rsc" style="width:41vw; height:53em; display: flex; flex-grow: 1;">
+        <div class="" style="width:41vw; height:53em; display: flex; flex-grow: 1;">
 
             <div id="map" style="width:100%; height:100%;"/>
         </div>
 
       <br style="clear:both;"/>
-    </div>
+    <!--</div>-->
       
       
       <br/>
